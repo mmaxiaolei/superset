@@ -20,6 +20,12 @@ import type {
 import { getCreationStatusText } from "../../utils/getCreationStatusText";
 import { DashboardSidebarWorkspaceDiffStats } from "../DashboardSidebarWorkspaceDiffStats";
 import { DashboardSidebarWorkspaceIcon } from "../DashboardSidebarWorkspaceIcon";
+import {
+	DASHBOARD_SIDEBAR_SECTION_WORKSPACE_CONNECTOR_CLASS_NAME,
+	DASHBOARD_SIDEBAR_SECTION_WORKSPACE_ROW_CLASS_NAME,
+	DASHBOARD_SIDEBAR_TOP_LEVEL_WORKSPACE_CONNECTOR_CLASS_NAME,
+	DASHBOARD_SIDEBAR_TOP_LEVEL_WORKSPACE_ROW_CLASS_NAME,
+} from "./hierarchy";
 
 const PR_STATE_LABEL: Record<
 	DashboardSidebarWorkspacePullRequest["state"],
@@ -109,6 +115,9 @@ export const DashboardSidebarExpandedWorkspaceRow = forwardRef<
 		const workspaceKindDescription = isMainWorkspace
 			? "Uses the repository checkout on this host"
 			: "Isolated copy for parallel development";
+		const hierarchyConnectorClassName = isInSection
+			? DASHBOARD_SIDEBAR_SECTION_WORKSPACE_CONNECTOR_CLASS_NAME
+			: DASHBOARD_SIDEBAR_TOP_LEVEL_WORKSPACE_CONNECTOR_CLASS_NAME;
 
 		return (
 			// biome-ignore lint/a11y/noStaticElementInteractions: Mirrors the legacy sidebar row UI, which includes nested action buttons.
@@ -131,7 +140,9 @@ export const DashboardSidebarExpandedWorkspaceRow = forwardRef<
 				onDoubleClick={onDoubleClick}
 				className={cn(
 					"relative flex w-full items-center pr-2 text-left text-sm",
-					isInSection ? "pl-7" : "pl-5",
+					isInSection
+						? DASHBOARD_SIDEBAR_SECTION_WORKSPACE_ROW_CLASS_NAME
+						: DASHBOARD_SIDEBAR_TOP_LEVEL_WORKSPACE_ROW_CLASS_NAME,
 					onClick &&
 						(isActive
 							? "cursor-pointer hover:bg-muted"
@@ -149,6 +160,7 @@ export const DashboardSidebarExpandedWorkspaceRow = forwardRef<
 						style={{ backgroundColor: "var(--color-foreground)" }}
 					/>
 				)}
+				<div aria-hidden="true" className={hierarchyConnectorClassName} />
 
 				<Tooltip delayDuration={500}>
 					<TooltipTrigger asChild>
